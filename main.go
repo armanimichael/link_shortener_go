@@ -1,19 +1,10 @@
 package main
 
 import (
-	"net/http"
-
-	"github.com/gin-gonic/gin"
+	router2 "github.com/armanimichael/link_shortener_go/router"
 )
 
 func main() {
-	router := gin.Default()
-	router.LoadHTMLGlob("templates/*")
-
-	router.GET("/", func(context *gin.Context) {
-		context.HTML(http.StatusOK, "index.tmpl", gin.H{
-			"title": "Homepage",
-		})
-	})
+	router := router2.NewRouter()
 	router.Run()
 }
