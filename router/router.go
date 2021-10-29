@@ -15,5 +15,10 @@ func NewRouter() *gin.Engine {
 		})
 	})
 
+	api := router.Group("/api")
+	{
+		apiRoutes(api)
+	}
+
 	return router
 }
