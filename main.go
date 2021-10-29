@@ -1,10 +1,10 @@
 package main
 
 import (
-	router "github.com/armanimichael/link_shortener_go/router"
+	"github.com/armanimichael/link_shortener_go/routes"
 )
 
 func main() {
-	router := router.NewRouter()
+	router := routes.NewRouter()
 	router.Run()
 }

@@ -1,4 +1,4 @@
-package router
+package routes
 
 import (
 	"github.com/armanimichael/link_shortener_go/shortener"
