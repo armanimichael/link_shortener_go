@@ -6,25 +6,25 @@ import (
 	"testing"
 )
 
-func getDB() *Database {
-	conn := fmt.Sprintf("../%s", defaultConnection)
-	db := NewDatabase(conn)
+func getDB() *database {
+	dir := fmt.Sprintf("../%s", defaultConnection)
+	db := newDatabase(dir)
 	return db
 }
 
-func TestNewDatabase_Connect(t *testing.T) {
+func TestDatabase_Connect(t *testing.T) {
 	db := getDB()
-	err := db.Connect()
+	err := db.connect()
 
 	if err != nil {
-		t.Errorf("failed to connect Database")
+		t.Errorf("failed to connect database")
 	}
 }
 
 func TestDatabase_Migrate(t *testing.T) {
 	db := getDB()
-	db.Connect()
-	db.Migrate()
+	db.connect()
+	db.migrate()
 
 	var links []models.Link
 	result := db.connection.Find(&links)

@@ -6,24 +6,31 @@ import (
 	"gorm.io/gorm"
 )
 
-const defaultConnection string = "linkshortener.db"
+const defaultConnection string = "./linkshortener.db"
 
-type Database struct {
+type database struct {
 	connection       *gorm.DB
 	connectionString string
 }
 
-func NewDatabase(connectionString string) *Database {
-	return &Database{
+func newDatabase(connectionString string) *database {
+	return &database{
 		connectionString: connectionString,
 	}
 }
 
-func (db *Database) Connect() (err error) {
+func (db *database) connect() (err error) {
 	db.connection, err = gorm.Open(sqlite.Open(db.connectionString), &gorm.Config{})
 	return err
 }
 
-func (db *Database) Migrate() {
+func (db *database) migrate() {
 	db.connection.AutoMigrate(&models.Link{})
+}
+
+func GetDB() *gorm.DB {
+	db := newDatabase(defaultConnection)
+	db.connect()
+	db.migrate()
+	return db.connection
 }

@@ -1,21 +1,8 @@
 package main
 
-import (
-	"github.com/armanimichael/link_shortener_go/database"
-	"github.com/armanimichael/link_shortener_go/routes"
-)
-
-const connectionStr string = "linkshortener.db"
+import "github.com/armanimichael/link_shortener_go/routes"
 
 func main() {
-	db := setupDB()
-	router := routes.NewRouter(db)
+	router := routes.NewRouter()
 	router.Run()
-}
-
-func setupDB() *database.Database {
-	db := database.NewDatabase(connectionStr)
-	db.Connect()
-	db.Migrate()
-	return db
 }
