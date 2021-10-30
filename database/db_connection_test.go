@@ -6,7 +6,7 @@ import (
 	"testing"
 )
 
-func getDB() *database {
+func getDB() *Database {
 	conn := fmt.Sprintf("../%s", defaultConnection)
 	db := NewDatabase(conn)
 	return db
@@ -17,7 +17,7 @@ func TestNewDatabase_Connect(t *testing.T) {
 	err := db.Connect()
 
 	if err != nil {
-		t.Errorf("failed to connect database")
+		t.Errorf("failed to connect Database")
 	}
 }
 

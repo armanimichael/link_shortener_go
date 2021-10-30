@@ -8,22 +8,22 @@ import (
 
 const defaultConnection string = "linkshortener.db"
 
-type database struct {
+type Database struct {
 	connection       *gorm.DB
 	connectionString string
 }
 
-func NewDatabase(connectionString string) *database {
-	return &database{
+func NewDatabase(connectionString string) *Database {
+	return &Database{
 		connectionString: connectionString,
 	}
 }
 
-func (db *database) Connect() (err error) {
+func (db *Database) Connect() (err error) {
 	db.connection, err = gorm.Open(sqlite.Open(db.connectionString), &gorm.Config{})
 	return err
 }
 
-func (db *database) Migrate() {
+func (db *Database) Migrate() {
 	db.connection.AutoMigrate(&models.Link{})
 }

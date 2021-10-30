@@ -1,11 +1,17 @@
 package routes
 
 import (
+	dbConnection "github.com/armanimichael/link_shortener_go/database"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
 
-func NewRouter() *gin.Engine {
+type routerWithDb struct {
+	*gin.Engine
+	db *dbConnection.Database
+}
+
+func NewRouter(db *dbConnection.Database) *routerWithDb {
 	router := gin.Default()
 	router.LoadHTMLGlob("templates/*")
 
@@ -20,5 +26,8 @@ func NewRouter() *gin.Engine {
 		apiRoutes(api)
 	}
 
-	return router
+	return &routerWithDb{
+		router,
+		db,
+	}
 }
