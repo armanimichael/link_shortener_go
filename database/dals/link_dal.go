@@ -21,6 +21,17 @@ func GetShortLink(originalLink string) (short string, exists bool) {
 	return "", false
 }
 
+func GetFullLink(shortLink string) (originalLink string, exists bool) {
+	var link models.Link
+	condition := &models.Link{ShortLink: shortLink}
+	db.Where(condition).First(&link)
+
+	if link.ID > 0 {
+		return link.OriginalLink, true
+	}
+	return "", false
+}
+
 func SetShortLink(originalLink string) string {
 	var short string
 	var link models.Link
