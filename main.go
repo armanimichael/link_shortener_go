@@ -8,10 +8,14 @@ import (
 const connectionStr string = "linkshortener.db"
 
 func main() {
+	db := setupDB()
+	router := routes.NewRouter(db)
+	router.Run()
+}
+
+func setupDB() *database.Database {
 	db := database.NewDatabase(connectionStr)
 	db.Connect()
 	db.Migrate()
-
-	router := routes.NewRouter(db)
-	router.Run()
+	return db
 }
