@@ -41,8 +41,9 @@ func TestDal_GetShortLink_Existing(t *testing.T) {
 		foundShort, exists := GetShortLink(dbEntry.OriginalLink)
 		if !exists {
 			t.Errorf("link not found in db")
+		} else {
+			t.Logf("Link found: %-2s -> %s", dbEntry.OriginalLink, foundShort)
 		}
-		t.Logf("Link found: %-2s -> %s", dbEntry.OriginalLink, foundShort)
 	}
 	deleteTestLinks()
 }
