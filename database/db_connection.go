@@ -10,6 +10,7 @@ import (
 
 const defaultConnection string = "./linkshortener.db"
 
+// DB connection singleton instance
 var connection *gorm.DB = nil
 var once sync.Once
 
@@ -22,7 +23,9 @@ func connect() {
 }
 
 func migrate() {
-	connection.AutoMigrate(&models.Link{})
+	if err := connection.AutoMigrate(&models.Link{}); err != nil {
+		log.Fatal(err)
+	}
 }
 
 func connectAndMigrate() {
@@ -30,6 +33,7 @@ func connectAndMigrate() {
 	migrate()
 }
 
+// GetDB returns the singleton DB instance
 func GetDB() *gorm.DB {
 	once.Do(connectAndMigrate)
 	return connection
