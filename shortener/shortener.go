@@ -23,6 +23,7 @@ func getAllowedChars() []byte {
 	return append(numbers, letters...)
 }
 
+// GetRandomCombination generates a random combination of bytes of a given length
 func GetRandomCombination(length int) []byte {
 	var list []byte
 	allowed := getAllowedChars()

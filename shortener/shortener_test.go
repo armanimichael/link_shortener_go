@@ -5,7 +5,7 @@ import "testing"
 const length int = 10
 const allowedCharsCount int = 62
 
-func TestAllowedChars(t *testing.T) {
+func Test_AllowedChars(t *testing.T) {
 	allowed := getAllowedChars()
 
 	if len(allowed) != allowedCharsCount {
@@ -13,7 +13,7 @@ func TestAllowedChars(t *testing.T) {
 	}
 }
 
-func TestRandomCombination(t *testing.T) {
+func Test_RandomCombination(t *testing.T) {
 	combination := GetRandomCombination(length)
 
 	combinationToStr := ""
@@ -23,7 +23,7 @@ func TestRandomCombination(t *testing.T) {
 	t.Logf("\n%s", combinationToStr)
 }
 
-func TestRandomicity(t *testing.T) {
+func Test_Randomicity(t *testing.T) {
 	var combinations [1000000]string
 
 	for i := 0; i < len(combinations); i++ {

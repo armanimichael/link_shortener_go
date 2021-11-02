@@ -10,6 +10,8 @@ const shortLinkLen int = 10
 
 var db = database.GetDB()
 
+// GetShortLink fetches the short version of a given link and returns it.
+// If not found it returns an empty string.
 func GetShortLink(originalLink string) (short string, exists bool) {
 	var link models.Link
 	condition := &models.Link{OriginalLink: originalLink}
@@ -21,6 +23,8 @@ func GetShortLink(originalLink string) (short string, exists bool) {
 	return "", false
 }
 
+// GetFullLink fetches the original version of a given short-link and returns it.
+// If not found it returns an empty string.
 func GetFullLink(shortLink string) (originalLink string, exists bool) {
 	var link models.Link
 	condition := &models.Link{ShortLink: shortLink}
@@ -32,6 +36,8 @@ func GetFullLink(shortLink string) (originalLink string, exists bool) {
 	return "", false
 }
 
+// SetShortLink generates and set a new unique short
+// link for a given original link
 func SetShortLink(originalLink string) string {
 	var short string
 	var link models.Link
