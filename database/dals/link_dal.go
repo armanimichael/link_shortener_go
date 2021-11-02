@@ -38,18 +38,18 @@ func SetShortLink(originalLink string) string {
 
 	exists := true
 	for exists {
-		exists = tryGenerateShort(link, short)
+		exists, short = tryGenerateShort(link, short)
 	}
 
 	insertShortLink(originalLink, short)
 	return short
 }
 
-func tryGenerateShort(link models.Link, short string) bool {
+func tryGenerateShort(link models.Link, short string) (bool, string) {
 	short = string(shortener.GetRandomCombination(shortLinkLen))
 	condition := &models.Link{ShortLink: short}
 	db.Where(condition).First(&link)
-	return link.ID > 0
+	return link.ID > 0, short
 }
 
 func insertShortLink(originalLink string, shortLink string) {
