@@ -4,33 +4,33 @@ import (
 	"github.com/armanimichael/link_shortener_go/database/models"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
+	"log"
+	"sync"
 )
 
 const defaultConnection string = "./linkshortener.db"
 
-type database struct {
-	connection       *gorm.DB
-	connectionString string
-}
+var connection *gorm.DB = nil
+var once sync.Once
 
-func newDatabase(connectionString string) *database {
-	return &database{
-		connectionString: connectionString,
+func connect() {
+	var err error
+	connection, err = gorm.Open(sqlite.Open(defaultConnection), &gorm.Config{})
+	if err != nil {
+		log.Fatal(err)
 	}
 }
 
-func (db *database) connect() (err error) {
-	db.connection, err = gorm.Open(sqlite.Open(db.connectionString), &gorm.Config{})
-	return err
+func migrate() {
+	connection.AutoMigrate(&models.Link{})
 }
 
-func (db *database) migrate() {
-	db.connection.AutoMigrate(&models.Link{})
+func connectAndMigrate() {
+	connect()
+	migrate()
 }
 
 func GetDB() *gorm.DB {
-	db := newDatabase(defaultConnection)
-	db.connect()
-	db.migrate()
-	return db.connection
+	once.Do(connectAndMigrate)
+	return connection
 }
