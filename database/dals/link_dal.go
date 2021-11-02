@@ -15,12 +15,12 @@ var db = database.GetDB()
 func GetShortLink(originalLink string) (short string, exists bool) {
 	var link models.Link
 	condition := &models.Link{OriginalLink: originalLink}
-	db.Where(condition).First(&link)
-
-	if link.ID > 0 {
-		return link.ShortLink, true
+	result := db.Find(&link, condition)
+	if result.Error != nil || result.RowsAffected < 1 {
+		return "", false
 	}
-	return "", false
+
+	return link.ShortLink, true
 }
 
 // GetFullLink fetches the original version of a given short-link and returns it.
@@ -30,7 +30,7 @@ func GetFullLink(shortLink string) (originalLink string, exists bool) {
 	condition := &models.Link{ShortLink: shortLink}
 	db.Where(condition).First(&link)
 
-	if link.ID > 0 {
+	if link.OriginalLink != "" {
 		return link.OriginalLink, true
 	}
 	return "", false
@@ -55,7 +55,7 @@ func tryGenerateShort(link models.Link, short string) (bool, string) {
 	short = string(shortener.GetRandomCombination(shortLinkLen))
 	condition := &models.Link{ShortLink: short}
 	db.Where(condition).First(&link)
-	return link.ID > 0, short
+	return link.OriginalLink != "", short
 }
 
 func insertShortLink(originalLink string, shortLink string) {

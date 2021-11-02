@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/armanimichael/link_shortener_go/database/models"
 	"github.com/armanimichael/link_shortener_go/shortener"
+	"log"
 	"testing"
 )
 
@@ -13,20 +14,22 @@ func generateTestLinks(count int) {
 	for i := 0; i < count; i++ {
 		short := string(shortener.GetRandomCombination(shortLinkLen))
 		originalLink := fmt.Sprintf("%d", i)
-		db.Create(&models.Link{
+		result := db.Create(&models.Link{
 			OriginalLink: originalLink,
 			ShortLink:    short,
 		})
+		log.Println(result.Error)
 		testLinks[originalLink] = short
 	}
 }
 
 func deleteTestLinks() {
 	for _, short := range testLinks {
-		var dbEntry models.Link
 		condition := &models.Link{ShortLink: short}
-		db.First(&dbEntry, condition)
-		db.Unscoped().Delete(&dbEntry)
+		result := db.Where(condition).Delete(&models.Link{})
+		if result.Error != nil || result.RowsAffected == 0 {
+			panic(result.Error)
+		}
 	}
 	testLinks = make(map[string]string)
 }
@@ -36,7 +39,7 @@ func TestDal_GetShortLink_Existing(t *testing.T) {
 	for _, short := range testLinks {
 		var dbEntry models.Link
 		condition := &models.Link{ShortLink: short}
-		db.First(&dbEntry, condition)
+		db.Find(&dbEntry, condition)
 
 		foundShort, exists := GetShortLink(dbEntry.OriginalLink)
 		if !exists {
@@ -51,7 +54,7 @@ func TestDal_GetShortLink_Existing(t *testing.T) {
 func TestDal_GetShortLink_NonExisting(t *testing.T) {
 	var dbEntry models.Link
 	condition := &models.Link{ShortLink: "fake-short-link"}
-	db.First(&dbEntry, condition)
+	db.Find(&dbEntry, condition)
 
 	foundShort, exists := GetShortLink(dbEntry.OriginalLink)
 	if !exists && foundShort == "" {
