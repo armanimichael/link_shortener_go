@@ -15,9 +15,10 @@ func getAsciiChars(index int, count int) []byte {
 }
 
 func getAllowedChars() []byte {
-	uppercase := getAsciiChars(97, 26)
-	lowercase := getAsciiChars(65, 26)
-	numbers := getAsciiChars(48, 10)
+	const lettersCount = 26
+	uppercase := getAsciiChars('A', lettersCount)
+	lowercase := getAsciiChars('a', lettersCount)
+	numbers := getAsciiChars('0', 10)
 
 	letters := append(lowercase, uppercase...)
 	return append(numbers, letters...)
@@ -25,14 +26,14 @@ func getAllowedChars() []byte {
 
 // GetRandomCombination generates a random combination of bytes of a given length
 func GetRandomCombination(length int) []byte {
-	var list []byte
+	var combination []byte
 	allowed := getAllowedChars()
 	allowedLen := len(allowed)
 
 	for i := 0; i < length; i++ {
 		random := rand.Intn(allowedLen)
-		list = append(list, allowed[random])
+		combination = append(combination, allowed[random])
 	}
 
-	return list
+	return combination
 }
