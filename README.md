@@ -1,5 +1,7 @@
 # Minimal Go Link Shortener
 
+This is just a project for test purposes, not even close to be suitable for production.
+
 `GET /`: List of shortened links
 
 `POST /api/generate-link`: Form data => link
